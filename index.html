@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media App</title>
+
+    <link rel="manifest" href="manifest.json">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <component :is="currentView"
+            @switch-view="switchView"
+            :user="currentUser"
+            :posts="posts"
+            @create-post="createdPost"
+            @user-selected="userSelected"
+            @like-post="likePost">
+        </component>
+        <toast ref="toast"></toast>
+    </div>
+    <script src="js/utils.js"></script>
+    <script src="js/vue-utils.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/dataService.js"></script>
+    <script src="js/db.js"></script>
+    
+    <script src="js/wc/feed-viewer.js"></script>
+
+    <script src="js/components/toast.js"></script>
+    <script src="js/components/user-onboarding.js"></script>
+    <script src="js/components/user-picker.js"></script>
+    <script src="js/components/feed-view.js"></script>
+    <script src="js/components/create-post.js"></script>
+    <script src="js/components/color-picker.js"></script>
+    <script src="js/components/font-picker.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
