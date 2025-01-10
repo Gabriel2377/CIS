@@ -21,20 +21,14 @@ class FeedViewer extends HTMLElement {
           user-select: none !important;
           display: block;
           width: 100vw;
-          height: 100vh;
-          overflow: hidden;
-          position: relative;
+          
+          
+          
         }
         .post {
           width: 100%;
-          height: 100%;
-          position: absolute;
-          top: 0;
-          left: 0;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
+          
+          
           background-size: cover;
           background-position: center;
           color: white;
@@ -42,10 +36,9 @@ class FeedViewer extends HTMLElement {
           transition: opacity 0.2s ease;
         }
         .post-content {
+        position: relative;
             scrollbar-width: none;
-            max-width: 100%;
-            max-height: 100%;
-            height: 100%;
+            height: 100vh;
             overflow-y: auto;
             padding: 20px;
             background-color: rgba(0, 0, 0, 0.5);
@@ -58,12 +51,7 @@ class FeedViewer extends HTMLElement {
           width: 100%;
           z-index: 10;
         }
-        @media (max-width: 768px) {
-          .post-content {
-            max-width: 90%;
-            max-height: 90%;
-          }
-        }
+        
       </style>
       <div class="panel-container">
         <slot name="panel"></slot>
@@ -163,8 +151,11 @@ class FeedViewer extends HTMLElement {
       </div>
     `;
 
+
+    newPostElement.style.display = 'block';
     newPostElement.style.opacity = '1';
     oldPostElement.style.opacity = '0';
+    oldPostElement.style.display = 'none';
 
     this.currentPost = post;
     this.currentIndex = (this.currentIndex + 1) % 2;
