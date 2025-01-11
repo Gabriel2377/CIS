@@ -6,6 +6,10 @@ class DataService {
 
         const response = await fetch(url, {
             method: 'GET',
+
+            headers: {
+                'Authorization': localStorage.getItem('token'),
+            },
         });
 
         if (!response.ok) {
