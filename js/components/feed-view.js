@@ -72,7 +72,11 @@ Vue.component('feed-view', {
     computed: {
 
         canPost() {
-            return localStorage.getItem('token') ? true : false;
+
+            // Check if user is on mobile
+            const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+            return !isMobile && localStorage.getItem('token') ? true : false;
         }
 
     },
