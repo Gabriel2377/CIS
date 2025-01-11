@@ -20,28 +20,24 @@ class FeedViewer extends HTMLElement {
         :host {
           user-select: none !important;
           display: block;
-          width: 100vw;
-          
-          
-          
+          width: 100vw; 
         }
-          
+
         .ql-align-center {
           text-align: center;
         }
-
+        
         .post {
-          width: 100%;
-          
-          
-          background-size: cover;
-          background-position: center;
-          color: white;
-          text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-          transition: opacity 0.2s ease;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+            color: #ffffffdb;
+            text-shadow: 5px 3px 3px rgb(0 0 0 / 93%);
+            transition: opacity 0.2s ease;
         }
+            
         .post-content {
-        position: relative;
+            position: relative;
             scrollbar-width: none;
             height: 100vh;
             overflow-y: auto;

@@ -114,7 +114,9 @@ Vue.component('feed-view', {
             let pId = currentPostId ? currentPostId*dir : undefined;
             DatabaseService.getPosts(pId).then(async posts => {
                 if (posts.length === 0) {
-                    posts = await DatabaseService.getPosts();
+                    posts = dir < 0 
+                        ? await DatabaseService.getPosts(-1)
+                        : await DatabaseService.getPosts();
                 }
                 this.currentPost = posts[0];
                 this.$refs.feedViewer.displayPost(this.currentPost);
