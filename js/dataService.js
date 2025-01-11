@@ -6,7 +6,6 @@ class DataService {
 
         const response = await fetch(url, {
             method: 'GET',
-
             headers: {
                 'Authorization': localStorage.getItem('token'),
             },
@@ -17,7 +16,13 @@ class DataService {
         }
 
         let postData = await response.json();  // return the response JSON data
-        postData.map(post => post.content = base64ToStr(post.content));
+        postData.map(post => {
+            try {
+                post.content = base64ToStr(post.content)
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
         return postData;
     }
 

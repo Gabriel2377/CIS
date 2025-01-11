@@ -112,7 +112,10 @@ Vue.component('feed-view', {
             const { direction, currentPostId } = event.detail;
             let dir = direction === 'left' ? 1 : -1;
             let pId = currentPostId ? currentPostId*dir : undefined;
-            DatabaseService.getPosts(pId).then(posts => {
+            DatabaseService.getPosts(pId).then(async posts => {
+                if (posts.length === 0) {
+                    posts = await DatabaseService.getPosts();
+                }
                 this.currentPost = posts[0];
                 this.$refs.feedViewer.displayPost(this.currentPost);
             });

@@ -25,7 +25,7 @@ class FeedViewer extends HTMLElement {
           
           
         }
-
+          
         .ql-align-center {
           text-align: center;
         }

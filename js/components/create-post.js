@@ -133,7 +133,7 @@ Vue.component('create-post', {
 
         // Set default styles
         state.editor.root.style.color = 'white';
-        state.editor.root.style.fontSize = FONTSIZES[constants.DFT_FNT_SZ];
+        state.editor.root.style.fontSize = FONTSIZES[0];
 
         // Add click handler to close format menus when clicking outside
         document.addEventListener('click', this.handleClickOutside);
@@ -208,7 +208,7 @@ Vue.component('create-post', {
             const selection = state.editorCurrentSelection;
             if (selection) {
                 const currentFormat = state.editor.getFormat(selection);
-                let currentSize = currentFormat.size || constants.FONTSIZES[constants.DFT_FNT_SZ];
+                let currentSize = currentFormat.size || constants.FONTSIZES[0];
                 const sizeIndex = constants.FONTSIZES.indexOf(currentSize);
                 if (action === 'increase' && sizeIndex < constants.FONTSIZES.length - 1) {
                     state.editor.format('size', constants.FONTSIZES[sizeIndex + 1]);
