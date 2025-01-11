@@ -27,6 +27,8 @@ const FONTSIZES = [
     '34px', '36px', '38px', '40px', '42px', '44px', '46px'
 ];
 
+const DFT_FNT_SZ = 0;
+
 const constants = {
     FONTS,
     FONTSIZES,

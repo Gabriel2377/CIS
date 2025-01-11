@@ -25,6 +25,7 @@ body {
 
 #app {
     height: 100vh;
+    overflow: hidden;
     
 }
 
@@ -72,6 +73,7 @@ body {
 
 /* Bottom Actions */
 .bottom-actions {
+    user-select: none;
     position: absolute;
     bottom: 40px;
     right: 0px;
@@ -84,6 +86,7 @@ body {
 
 /* FAB and Menu Styles */
 .fab {
+    user-select: none;
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -100,10 +103,12 @@ body {
 }
 
 .fab:active {
+    user-select: none;
     transform: scale(0.95);
 }
 
 .fab-menu {
+    user-select: none;
     position: relative;
     display: inline-block;
 }
