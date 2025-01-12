@@ -12,6 +12,21 @@ Vue.component('feed-view', {
         <!-- Action Sheet -->
         <div v-if="showActionSheetModal" class="modal" @click.self="showActionSheetModal = false">
             <div class="modal-content">
+                <!-- <h3>Options</h3> -->
+                
+                <button @click="showAddPostWPINModal=1">Add post</button>
+                <button @click="setPostType(0)">Set post as verse</button>
+                <button @click="setPostType(1)">Set post as poetry</button>
+                <!-- <button @click="exportPosts">Export Posts</button>
+                <button @click="syncPosts">Sync Posts</button>
+                <button @click="triggerFileInput">Import Posts</button>
+                <input type="file" ref="fileInput" @change="importPosts" style="display: none;"> -->
+            </div>
+        </div>
+
+        <!-- Add post w PIN -->
+        <div v-if="showAddPostWPINModal" class="modal" @click.self="showAddPostWPINModal = false">
+            <div class="modal-content">
                 <h3>Add post with PIN</h3>
                 <input v-model="SyncPIN" 
                        required
@@ -56,6 +71,7 @@ Vue.component('feed-view', {
     data() {
         return {
             showActionSheetModal: false,
+            showAddPostWPINModal: false,
             showListModal: false,
             lists: [],
             newListName: '',
@@ -120,6 +136,13 @@ Vue.component('feed-view', {
                 }
                 this.currentPost = posts[0];
                 this.$refs.feedViewer.displayPost(this.currentPost);
+            });
+        },
+
+        setPostType(type) {
+            this.currentPost.type = type;
+            DatabaseService.setPostType(this.currentPost).then(() => {
+                this.showActionSheetModal = false;
             });
         },
 

@@ -5,7 +5,7 @@ const db = new Dexie('socialApp');
 
 db.version(1).stores({
     users: '++id, name, createdAt',
-    posts: '++id, userId, content, backgroundUrl, createdAt',
+    posts: '++id, userId, content, backgroundUrl, createdAt, type',
     lists: '++id, userId, name',
     savedPosts: '++id, postId, listId, userId'
 });
@@ -41,6 +41,10 @@ const DatabaseService = {
 
     async removePost(postId) {
         await DataService.removePost(postId);
+    },
+
+    async setPostType(post) {
+        await DataService.setPostType(post);
     },
 
     async getPosts(postId = Number.MAX_SAFE_INTEGER) {

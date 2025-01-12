@@ -1,4 +1,29 @@
 class DataService {
+
+    static async setPostType(post) {
+
+        let postData = {
+            userId: post.userId,
+            type: post.type,
+        };
+
+        const url = `https://n2n.openpath.foundation/webhook/5a725277-99bf-4d2b-827b-4ccf163a48bb/posts/${post.id}/setType`;
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': localStorage.getItem('token'),
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify(postData),  // body contains JSON data
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to set post type');
+        }
+    }
+
     // Method for making GET request
     static async getPosts(postId = Number.MAX_SAFE_INTEGER) {
         state.postsIndex += POSTS_AHEAD * Math.sign(postId);
@@ -64,7 +89,7 @@ class DataService {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to create post');
+            throw new Error('Failed to remove post');
         }
 
         // return await response.json();  // return the response JSON data
