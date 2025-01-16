@@ -13,8 +13,8 @@ function hslToHex(h, s, l) {
   // create a function to generate color gradients
   const generateColorGradients = () => Array.from({ length: 360 }, (_, index) => {
     const hue = index; 
-    const saturation = 70; // Fixed saturation value
-    const lightness = 50;  // Fixed lightness value
+    const saturation = 39; // Fixed saturation value
+    const lightness = 68;  // Fixed lightness value
   
     // Convert HSL to Hex
     return hslToHex(hue, saturation, lightness);
