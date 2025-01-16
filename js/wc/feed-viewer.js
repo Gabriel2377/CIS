@@ -5,7 +5,7 @@ class FeedViewer extends HTMLElement {
     this.currentPost = null;
     this.touchStartX = 0;
     this.touchEndX = 0;
-    this.swipeSensitivity = 80; // pixels
+    this.swipeSensitivity = 50; // pixels
     this.activePostIndex = 0;
   }
 
@@ -42,7 +42,7 @@ class FeedViewer extends HTMLElement {
             height: 100vh;
             overflow-y: auto;
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.68);
+            background-color: rgba(0, 0, 0, 0.62);
             border-radius: 10px;
         }
         .panel-container {
