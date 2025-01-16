@@ -5,7 +5,7 @@ class FeedViewer extends HTMLElement {
     this.currentPost = null;
     this.touchStartX = 0;
     this.touchEndX = 0;
-    this.swipeSensitivity = 50; // pixels
+    this.swipeSensitivity = 80; // pixels
     this.activePostIndex = 0;
   }
 

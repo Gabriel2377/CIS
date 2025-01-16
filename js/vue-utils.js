@@ -8,7 +8,7 @@ Vue.directive('longpress', {
 
         pressTimer = setTimeout(() => {
           binding.value(e); // Execute the callback
-        }, 1000); // Adjust duration for long press
+        }, 5000); // Adjust duration for long press
       };
 
       const cancel = () => {
