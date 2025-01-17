@@ -1,20 +1,3 @@
-// prevent pull refresh
-let isTouching = false;
-
-window.addEventListener('touchstart', (event) => {
-  isTouching = window.scrollY === 0;
-}, { passive: true });
-
-window.addEventListener('touchmove', (event) => {
-  if (isTouching && event.touches[0].clientY > 0) {
-    event.preventDefault(); // Prevent pull-to-refresh only at the top of the page
-  }
-}, { passive: false });
-
-window.addEventListener('touchend', () => {
-  isTouching = false;
-});
-
 // VUE
 
 Vue.config.ignoredElements = [
