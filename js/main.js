@@ -1,11 +1,21 @@
+// prevent pull refresh
+let isTouching = false;
 
-// Add this to your main script or as part of initialization
-window.addEventListener('touchmove', function (event) {
-    // Prevent default if the user is scrolling near the top of the page
-    if (window.scrollY === 0) {
-      event.preventDefault();
-    }
-  }, { passive: false });
+window.addEventListener('touchstart', (event) => {
+  isTouching = window.scrollY === 0;
+}, { passive: true });
+
+window.addEventListener('touchmove', (event) => {
+  if (isTouching && event.touches[0].clientY > 0) {
+    event.preventDefault(); // Prevent pull-to-refresh only at the top of the page
+  }
+}, { passive: false });
+
+window.addEventListener('touchend', () => {
+  isTouching = false;
+});
+
+// VUE
 
 Vue.config.ignoredElements = [
     'feed-viewer'
