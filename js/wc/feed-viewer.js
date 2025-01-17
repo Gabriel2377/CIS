@@ -43,7 +43,7 @@ class FeedViewer extends HTMLElement {
             overflow-y: auto;
             padding: 20px;
             background-color: rgba(0, 0, 0, 0.50);
-            border-radius: 10px;
+            border-radius: 0px;
         }
         .panel-container {
           position: absolute;
