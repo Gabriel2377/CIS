@@ -1,3 +1,12 @@
+
+// Add this to your main script or as part of initialization
+window.addEventListener('touchmove', function (event) {
+    // Prevent default if the user is scrolling near the top of the page
+    if (window.scrollY === 0) {
+      event.preventDefault();
+    }
+  }, { passive: false });
+
 Vue.config.ignoredElements = [
     'feed-viewer'
 ];
