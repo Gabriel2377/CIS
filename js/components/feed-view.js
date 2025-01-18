@@ -181,6 +181,8 @@ Vue.component('feed-view', {
 
         createPost(event, storePin) {
             if (storePin) localStorage.setItem('token', this.SyncPIN);
+
+            state.currentPost = {};
             if (localStorage.getItem('token')) {
                 this.$emit('switch-view', 'create-post');
             }

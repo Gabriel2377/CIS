@@ -5,6 +5,7 @@ Vue.component('create-post', {
                 <div class="post-overlay" :style="{ backgroundColor: 'rgba(0, 0, 0, ' + overlayTransparency + ')' }">
                     <!-- disable spellcheck -->
                     <div id="editor" spellcheck="false">
+                    Tot ce voiti sa va faca voua oamenii facetile si voi la fel caci in aceasta este cuprinsa Legea si Prorocii
                     </div>
                 </div>
             </div>
@@ -120,11 +121,9 @@ Vue.component('create-post', {
                 this.existingPost = posts[0]
                 this.backgroundUrl = this.existingPost.backgroundUrl;
                 this.overlayTransparency = this.existingPost.overlayTransparency;
-                state.editor.root.innerHTML = this.existingPost.content || 
-                'Tot ce voiti sa va faca voua oamenii facetile si voi la fel caci in aceasta este cuprinsa Legea si Prorocii';
+                state.editor.root.innerHTML = this.existingPost.content;
             });
         }
-
 
         // Define a custom LetterSpacing format
         let Inline = Quill.import('blots/inline');
