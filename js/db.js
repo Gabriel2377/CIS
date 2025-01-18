@@ -11,6 +11,13 @@ db.version(1).stores({
 });
 
 const DatabaseService = {
+
+    filter: {
+        get postType(){
+            return state.currentPostViewType;
+        }
+    },
+
     async initUser(name) {
         const userId = await db.users.add({
             name,

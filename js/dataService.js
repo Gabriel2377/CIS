@@ -1,5 +1,9 @@
 class DataService {
 
+    static get currentPostViewType(){
+        return state.currentPostViewType;
+    }
+
     static async setPostType(post) {
 
         let postData = {
@@ -53,8 +57,13 @@ class DataService {
 
         let headers = {
             'Authorization': localStorage.getItem('token'),
-            'load': 'exact'
+            'load': 'exact',
+            'filterPostType': DataService.currentPostViewType
         };
+
+        if (this.currentPostViewType===undefined) {
+            delete headers.filterPostType
+        }
 
         if (!loadExact) {
             delete headers.load;

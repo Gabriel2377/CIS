@@ -234,6 +234,7 @@ Vue.component('create-post', {
                 this.showFontSizeOptions = false;
             }
         },
+
         format(command) {
             const selection = state.editorCurrentSelection;
             if (selection) {
@@ -241,6 +242,7 @@ Vue.component('create-post', {
                 state.editor.format(command, !currentFormat[command]);
             }
         },
+
         align(alignment) {
             const selection = state.editorCurrentSelection;
             if (selection) {
@@ -252,21 +254,25 @@ Vue.component('create-post', {
                 state.editor.format('align', alignment);
             }
         },
+
         setBackground() {
             this.showBackgroundModal = false;
         },
+
         setColor(color) {
             const selection = state.editorCurrentSelection;
             if (selection) {
                 state.editor.format('color', color);
             }
         },
+
         setFont(fontName) {
             const selection = state.editorCurrentSelection;
             if (selection) {
                 state.editor.format('font', fontName);
             }
         },
+        
         changeLineSize(action) {
             const selection = state.editorCurrentSelection;
             if (selection) {
@@ -311,6 +317,7 @@ Vue.component('create-post', {
                 }
             }
         },
+
         async savePost() {
             const content = state.editor.root.innerHTML;
             // await DatabaseService.addPost({

@@ -2,11 +2,26 @@ Vue.component('feed-view', {
     template: html`
     <div>
         <feed-viewer ref="feedViewer" v-longpress="showActionSheet">
-            <div v-if="canPost" slot="panel" class="panel">
+
+            <div slot="panel" class="panel">
+                <button v-if="postType==0" @click="setViewPostType"  class="fab"><i class="fas fa-book"></i></button>
+                <button v-if="postType==1" @click="setViewPostType"  class="fab"><i class="fas fa-water"></i></button>
+                <div v-if="canPost" class="fab-menu">
+                    <button class="fab" @click="showOptionsMenu = !showOptionsMenu">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <div v-if="showOptionsMenu" class="format-options">
+                        <button id="createPost" class="fab"><i class="fas fa-plus"></i></button>
+                        <button id="editPost" class="fab"><i class="fas fa-pencil"></i></button>
+                        <button id="removePost" class="fab"><i class="fas fa-trash"></i></button>                    </div>
+                </div>
+            </div>
+
+            <!-- <div v-if="canPost" slot="panel" class="panel">
                 <button id="createPost" class="fab"><i class="fas fa-plus"></i></button>
                 <button id="editPost" class="fab"><i class="fas fa-pencil"></i></button>
                 <button id="removePost" class="fab"><i class="fas fa-trash"></i></button>
-            </div>
+            </div> -->
             <div slot="post-content"></div>
         </feed-viewer>
 
@@ -82,7 +97,8 @@ Vue.component('feed-view', {
             SyncPIN: '',
             postsLastIndex: null,
             currentPost: {},
-
+            showOptionsMenu: false,
+            postType: 0
         };
     },
 
@@ -102,6 +118,9 @@ Vue.component('feed-view', {
 
         this.lists = await DatabaseService.getLists(state.currentUser.id);
 
+        // Add click handler to close format menus when clicking outside
+        document.addEventListener('click', this.handleClickOutside);
+
         // document.getElementById('feed-container').addEventListener('scrollsnapchange', this.handleScroll);
 
         //TODO: Add event listener for scroll
@@ -120,10 +139,27 @@ Vue.component('feed-view', {
     },
 
     beforeDestroy() {
+
+        document.removeEventListener('click', this.handleClickOutside);
+
         //TODO: Remove event listener for scroll
         // window.removeEventListener('scroll', this.handleScroll);
     },
     methods: {
+
+        setViewPostType(){
+            this.postType=(this.postType+1)%2;
+            state.currentPostViewType = this.postType;
+        },
+
+        handleClickOutside(event) {
+            if (!event.target.closest('.fab-menu')) {
+                this.showFormatting = false;
+                this.showAlignment = false;
+                this.showMediaOptions = false;
+                this.showFontSizeOptions = false;
+            }
+        },
 
         loadData(event) {
             const { direction, currentPostId } = event.detail;
