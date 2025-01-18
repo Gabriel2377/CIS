@@ -47,8 +47,8 @@ const DatabaseService = {
         await DataService.setPostType(post);
     },
 
-    async getPosts(postId = Number.MAX_SAFE_INTEGER) {
-        let posts = await DataService.getPosts(postId || Number.MAX_SAFE_INTEGER);
+    async getPosts(postId = Number.MAX_SAFE_INTEGER, loadExact = false) {
+        let posts = await DataService.getPosts(postId || Number.MAX_SAFE_INTEGER, loadExact);
         // let posts = await db.posts.where('userId').equals(userId)
         //     .sortBy('createdAt');
         // posts = posts.map(post => (post.content += ' ' + post.id, post));

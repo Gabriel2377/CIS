@@ -4,6 +4,7 @@ Vue.component('feed-view', {
         <feed-viewer ref="feedViewer" v-longpress="showActionSheet">
             <div v-if="canPost" slot="panel" class="panel">
                 <button id="createPost" class="fab"><i class="fas fa-plus"></i></button>
+                <button id="editPost" class="fab"><i class="fas fa-pencil"></i></button>
                 <button id="removePost" class="fab"><i class="fas fa-trash"></i></button>
             </div>
             <div slot="post-content"></div>
@@ -80,7 +81,7 @@ Vue.component('feed-view', {
             showSyncModal: false,
             SyncPIN: '',
             postsLastIndex: null,
-            currentPost: [],
+            currentPost: {},
 
         };
     },
@@ -170,6 +171,11 @@ Vue.component('feed-view', {
                     this.createPost();
                 });
             }
+            else if (action == 'editPost') {
+                this.$nextTick(() => {
+                    this.editPost();
+                });
+            }
 
         },
 
@@ -180,6 +186,16 @@ Vue.component('feed-view', {
             }
             else
                 this.showActionSheet();
+        },
+
+        editPost(event, storePin) {
+            if (storePin) localStorage.setItem('token', this.SyncPIN);
+            if (localStorage.getItem('token')) {
+                state.currentPost = this.currentPost;
+                this.$emit('switch-view', 'create-post', this.currentPost.id);
+            }
+            // else
+            //     this.showActionSheet();
         },
 
         async removePost(event, post) {

@@ -7,6 +7,7 @@ Vue.config.ignoredElements = [
 const state = {
     currentView: 'user-onboarding',
     currentUser: null,
+    currentPost: null,
     posts: [],
     lists: [],
     editor: null,

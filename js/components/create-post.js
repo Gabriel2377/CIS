@@ -2,10 +2,9 @@ Vue.component('create-post', {
     template: html`
         <div class="editor-container">
             <div class="editor-content" :style="{ backgroundImage: backgroundUrl ? 'url(' + backgroundUrl + ')' : 'none' }">
-                <div class="post-overlay">
+                <div class="post-overlay" :style="{ backgroundColor: 'rgba(0, 0, 0, ' + overlayTransparency + ')' }">
                     <!-- disable spellcheck -->
                     <div id="editor" spellcheck="false">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis ut illo, odit officiis quibusdam magnam deleniti est dolorem a rem asperiores, libero accusamus repellat fugiat voluptas totam nulla amet dignissimos voluptatibus laborum sint! Voluptates cum exercitationem nihil magni harum culpa minima eius veritatis quia incidunt! Minus, animi quia. Id sunt totam, voluptatibus earum tenetur beatae, debitis error quas consectetur hic fuga minus consequatur. Odit nemo, labore facilis suscipit hic soluta praesentium, molestias ab voluptas delectus molestiae culpa, aliquid dolores! Expedita!
                     </div>
                 </div>
             </div>
@@ -52,6 +51,10 @@ Vue.component('create-post', {
                     <div v-if="showFontSizeOptions" class="format-options">
                         <button @click="changeFontSize('increase')"><i class="fas fa-plus"></i></button>
                         <button @click="changeFontSize('decrease')"><i class="fas fa-minus"></i></button>
+                        <button @click="changeLineSize('increase')"><i class="fas fa-plus"></i>&nbsp;<i class="fas fa-arrows-alt-v"></i></button>
+                        <button @click="changeLineSize('decrease')"><i class="fas fa-minus"></i>&nbsp;<i class="fas fa-arrows-alt-v"></i></button>
+                        <button @click="changeLetterSpacing('increase')"><i class="fas fa-plus"></i>&nbsp;<i class="fas fa-arrows-alt-h"></i></button>
+                        <button @click="changeLetterSpacing('decrease')"><i class="fas fa-minus"></i>&nbsp;<i class="fas fa-arrows-alt-h"></i></button>
                     </div>
                 </div>
                 
@@ -68,6 +71,7 @@ Vue.component('create-post', {
                     <input v-model="backgroundUrl" 
                            type="text" 
                            placeholder="Enter image URL">
+                    <input id="transparency" type="range" v-model="overlayTransparency" min="0" max="1" step="0.01">
                     <button @click="setBackground">Set Background</button>
                     <button @click="showBackgroundModal = false">Cancel</button>
                 </div>
@@ -88,7 +92,7 @@ Vue.component('create-post', {
             
         </div>
     `,
-    
+
     data() {
         return {
             editor: null,
@@ -99,21 +103,77 @@ Vue.component('create-post', {
             showFormatting: false,
             showAlignment: false,
             showMediaOptions: false,
-            showFontSizeOptions: false
+            showFontSizeOptions: false,
+            overlayTransparency: 0.5,
+            existingPost: { content: '' },
+            existingPostId: null
         };
     },
+
     mounted() {
 
-        // add an array of values
+        // load existingPostId post
+
+        this.existingPostId = state.currentPost.id;
+        if (this.existingPostId) {
+            this.existingPost = DatabaseService.getPosts(this.existingPostId, true).then(posts => {
+                this.existingPost = posts[0]
+                this.backgroundUrl = this.existingPost.backgroundUrl;
+                this.overlayTransparency = this.existingPost.overlayTransparency;
+                state.editor.root.innerHTML = this.existingPost.content || 
+                'Tot ce voiti sa va faca voua oamenii facetile si voi la fel caci in aceasta este cuprinsa Legea si Prorocii';
+            });
+        }
+
+
+        // Define a custom LetterSpacing format
+        let Inline = Quill.import('blots/inline');
+        class LetterSpacing extends Inline {
+            static create(value) {
+                let node = super.create();
+                node.style.letterSpacing = value;
+                return node;
+            }
+
+            static formats(node) {
+                return node.style.letterSpacing || 'normal';
+            }
+        }
+
+        LetterSpacing.blotName = 'letterSpacing';
+        LetterSpacing.tagName = 'span';
+        LetterSpacing.className = 'letter-spacing';
+        Quill.register(LetterSpacing);
+
+        // add an array of font values
         const fontFamilyArr = constants.FONTS;
         let fonts = Quill.import("attributors/style/font");
         fonts.whitelist = fontFamilyArr;
         Quill.register(fonts, true);
 
+        // add an array of size values
         const fontSizeArr = constants.FONTSIZES;
         var Size = Quill.import('attributors/style/size');
         Size.whitelist = fontSizeArr;
         Quill.register(Size, true);
+
+        // Define a custom LineHeight format
+        let Block = Quill.import('blots/block');
+        class LineHeight extends Block {
+            static create(value) {
+                let node = super.create();
+                node.style.lineHeight = value;
+                return node;
+            }
+
+            static formats(node) {
+                return node.style.lineHeight || 'normal';
+            }
+        }
+
+        LineHeight.blotName = 'lineHeight';
+        LineHeight.tagName = 'div';
+        Quill.register(LineHeight);
 
         // Initialize Quill with specific modules and formats
         state.editor = new Quill('#editor', {
@@ -121,7 +181,7 @@ Vue.component('create-post', {
             modules: {
                 toolbar: false
             },
-            formats: ['bold', 'italic', 'underline', 'align', 'color', 'font', 'size']
+            formats: ['bold', 'italic', 'underline', 'align', 'color', 'font', 'size', 'letterSpacing', 'lineHeight']
         });
 
         state.editor.on('selection-change', (range) => {
@@ -134,13 +194,17 @@ Vue.component('create-post', {
         // Set default styles
         state.editor.root.style.color = 'white';
         state.editor.root.style.fontSize = FONTSIZES[0];
+        // // Set line heights
+        // state.editor.root.style.lineHeight = '1.5';
 
         // Add click handler to close format menus when clicking outside
         document.addEventListener('click', this.handleClickOutside);
     },
+
     beforeDestroy() {
         document.removeEventListener('click', this.handleClickOutside);
     },
+
     methods: {
 
         closeColorPicker() {
@@ -204,6 +268,37 @@ Vue.component('create-post', {
                 state.editor.format('font', fontName);
             }
         },
+        changeLineSize(action) {
+            const selection = state.editorCurrentSelection;
+            if (selection) {
+                const currentFormat = state.editor.getFormat(selection);
+                let currentLineHeight = currentFormat.lineHeight * 1 || 1;
+                const lineHeights = constants.LINE_HEIGHTS;
+                const sizeIndex = lineHeights.indexOf(currentLineHeight);
+                if (action === 'increase' && sizeIndex < lineHeights.length - 1) {
+                    state.editor.format('lineHeight', lineHeights[sizeIndex + 1]);
+                } else if (action === 'decrease' && sizeIndex > 0) {
+                    state.editor.format('lineHeight', lineHeights[sizeIndex - 1]);
+                }
+            }
+        },
+
+        changeLetterSpacing(action) {
+            const selection = state.editorCurrentSelection;
+            if (selection) {
+                const currentFormat = state.editor.getFormat(selection);
+                let currentLetterSpacing = currentFormat.letterSpacing || '2px';
+                // create an array of letter spacing values with step of 2px
+                const letterSpacings = constants.LETTER_SPACINGS;
+                const sizeIndex = letterSpacings.indexOf(currentLetterSpacing);
+                if (action === 'increase' && sizeIndex < letterSpacings.length - 1) {
+                    state.editor.format('letterSpacing', letterSpacings[sizeIndex + 1]);
+                } else if (action === 'decrease' && sizeIndex > 0) {
+                    state.editor.format('letterSpacing', letterSpacings[sizeIndex - 1]);
+                }
+            }
+        },
+
         changeFontSize(action) {
             const selection = state.editorCurrentSelection;
             if (selection) {
@@ -227,10 +322,13 @@ Vue.component('create-post', {
             // });
 
             await DataService.createPost({
+                id: this.existingPostId,
+                type: state.currentPost.type,
                 content,
                 backgroundUrl: this.backgroundUrl,
                 userId: state.currentUser.id,
-                createdAt: Date.now()
+                createdAt: Date.now(),
+                overlayTransparency: this.overlayTransparency
             });
 
             // notify post creation

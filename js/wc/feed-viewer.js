@@ -42,7 +42,7 @@ class FeedViewer extends HTMLElement {
             height: 100vh;
             overflow-y: auto;
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.50);
+            /*background-color: rgba(0, 0, 0, 0.50);*/
             border-radius: 0px;
         }
         .panel-container {
@@ -147,7 +147,7 @@ class FeedViewer extends HTMLElement {
 
     newPostElement.style.backgroundImage = `url(${post.backgroundUrl})`;
     newPostElement.innerHTML = `
-      <div class="post-content">
+      <div class="post-content" style="background-color: rgba(0, 0, 0, ${post.overlayTransparency});">
         ${post.content}
       </div>
     `;

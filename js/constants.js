@@ -27,10 +27,16 @@ const FONTSIZES = [
     '34px', '36px', '38px', '40px', '42px', '44px', '46px'
 ];
 
+const LINE_HEIGHTS = Array.from({ length: 8 }, (_, i) =>1 + i * 0.25);
+
+const LETTER_SPACINGS = Array.from({ length: 10 }, (_, i) => (i+1) * 2 + 'px');
+
 const constants = {
     FONTS,
     FONTSIZES,
     COLORS,
+    LINE_HEIGHTS,
+    LETTER_SPACINGS
 }
 
 // needs to be set also on the server to work

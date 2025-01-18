@@ -1,0 +1,40 @@
+
+# new posts come first in descending order from lastPostID while scrolling down 
+# nth request gets posts in descending order from id < lastPostID
+# 
+
+curl 'https://n2n.openpath.foundation/webhook/f50df3ab-cdd3-44c4-80b1-a262925d221b/posts/-3' 
+
+
+###
+GET https://n2n.openpath.foundation/webhook-test/f50df3ab-cdd3-44c4-80b1-a262925d221b/posts/40 HTTP/1.1
+Authorization: 111111
+load: exact
+
+
+####
+POST https://n2n.openpath.foundation/webhook/5a725277-99bf-4d2b-827b-4ccf163a48bb/posts/0 HTTP/1.1
+Authorization: 111111
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "content": "Hello, World!",
+  "backgroundUrl": "This is a test post.",
+  "createdAt": "2021-09-01T12:00:00Z"
+}
+
+
+####
+POST https://n2n.openpath.foundation/webhook/5a725277-99bf-4d2b-827b-4ccf163a48bb/posts/11/remove HTTP/1.1
+Authorization: 111111
+
+####
+POST https://n2n.openpath.foundation/webhook/5a725277-99bf-4d2b-827b-4ccf163a48bb/posts/0/setType HTTP/1.1
+Authorization: 111111
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "type": 1
+}
