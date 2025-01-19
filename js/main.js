@@ -11,7 +11,8 @@ const state = {
     posts: [],
     lists: [],
     editor: null,
-    editorCurrentSelection: null
+    editorCurrentSelection: null,
+    currentPostViewType: 0
 }
 
 new Vue({
