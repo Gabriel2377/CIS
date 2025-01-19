@@ -54,3 +54,10 @@ function strToBase64(utf8String) {
 
   return base64String;
 }
+
+
+// Global error handler
+window.onerror = function(message, source, lineno, colno, error) {
+  alert(`Error: ${message}\nSource: ${source}\nLine: ${lineno}\nColumn: ${colno}\nError Object: ${error}`);
+  return false; // Prevent the default browser error handling
+};
