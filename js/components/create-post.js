@@ -125,24 +125,47 @@ Vue.component('create-post', {
             });
         }
 
-        // Define a custom LetterSpacing format
-        let Inline = Quill.import('blots/inline');
-        class LetterSpacing extends Inline {
-            static create(value) {
-                let node = super.create();
-                node.style.letterSpacing = value;
-                return node;
+        try {
+            // Define a custom LetterSpacing format
+            let Inline = Quill.import('blots/inline');
+            class LetterSpacing extends Inline {
+                static create(value) {
+                    let node = super.create();
+                    node.style.letterSpacing = value;
+                    return node;
+                }
+
+                static formats(node) {
+                    return node.style.letterSpacing || 'normal';
+                }
             }
 
-            static formats(node) {
-                return node.style.letterSpacing || 'normal';
+            LetterSpacing.blotName = 'letterSpacing';
+            LetterSpacing.tagName = 'span';
+            LetterSpacing.className = 'letter-spacing';
+            Quill.register(LetterSpacing);
+
+            // Define a custom LineHeight format
+            let Block = Quill.import('blots/block');
+            class LineHeight extends Block {
+                static create(value) {
+                    let node = super.create();
+                    node.style.lineHeight = value;
+                    return node;
+                }
+
+                static formats(node) {
+                    return node.style.lineHeight || 'normal';
+                }
             }
+
+            LineHeight.blotName = 'lineHeight';
+            LineHeight.tagName = 'div';
+            Quill.register(LineHeight);
+        } catch (error) {
+
         }
 
-        LetterSpacing.blotName = 'letterSpacing';
-        LetterSpacing.tagName = 'span';
-        LetterSpacing.className = 'letter-spacing';
-        Quill.register(LetterSpacing);
 
         // add an array of font values
         const fontFamilyArr = constants.FONTS;
@@ -155,24 +178,6 @@ Vue.component('create-post', {
         var Size = Quill.import('attributors/style/size');
         Size.whitelist = fontSizeArr;
         Quill.register(Size, true);
-
-        // Define a custom LineHeight format
-        let Block = Quill.import('blots/block');
-        class LineHeight extends Block {
-            static create(value) {
-                let node = super.create();
-                node.style.lineHeight = value;
-                return node;
-            }
-
-            static formats(node) {
-                return node.style.lineHeight || 'normal';
-            }
-        }
-
-        LineHeight.blotName = 'lineHeight';
-        LineHeight.tagName = 'div';
-        Quill.register(LineHeight);
 
         // Initialize Quill with specific modules and formats
         state.editor = new Quill('#editor', {
@@ -272,7 +277,7 @@ Vue.component('create-post', {
                 state.editor.format('font', fontName);
             }
         },
-        
+
         changeLineSize(action) {
             const selection = state.editorCurrentSelection;
             if (selection) {
