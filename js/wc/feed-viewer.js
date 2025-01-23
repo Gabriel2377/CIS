@@ -43,6 +43,7 @@ class FeedViewer extends HTMLElement {
             overflow-y: auto;
             padding: 20px;
             /*background-color: rgba(0, 0, 0, 0.50);*/
+            color: #ffffffc4,
             border-radius: 0px;
         }
         .panel-container {
