@@ -37,17 +37,19 @@ class FeedViewer extends HTMLElement {
         }
             
         .post-content {
-            display: flex;
-            position: relative;
-            scrollbar-width: none;
-            height: 100vh;
-            overflow-y: auto;
-            padding: 20px;
-            /* background-color: rgba(0, 0, 0, 0.50); */
-            color: #ffffffc4;
-            border-radius: 0px;
-            flex-direction: column;
-            justify-content: center;
+          position: relative;
+          scrollbar-width: none;
+          height: 100vh;
+          overflow-y: auto;
+          padding: 20px;
+          /* background-color: rgba(0, 0, 0, 0.50); */
+          color: #ffffffc4;
+          border-radius: 0px;
+          /*
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          */
         }
         .panel-container {
           position: absolute;
