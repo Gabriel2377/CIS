@@ -34,7 +34,7 @@ Vue.component('feed-view', {
                 <button @click="showAddPostWPINModal=1">Add post</button>
                 <button @click="setPostType(0)">Set post as verse</button>
                 <button @click="setPostType(1)">Set post as poetry</button>
-                <hr>
+                <hr style="border: 1px solid #5d5757">
                 <button v-if="postType==0" @click="setViewPostType"  class="fab"><i class="fas fa-book"></i></button>
                 <button v-if="postType==1" @click="setViewPostType"  class="fab"><i class="fas fa-water"></i></button>
                 <button @click="createPost($event,0)" class="fab"><i class="fas fa-plus"></i></button>
