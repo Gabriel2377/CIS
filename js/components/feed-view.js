@@ -3,7 +3,7 @@ Vue.component('feed-view', {
     <div>
         <feed-viewer ref="feedViewer" v-longpress="showActionSheet">
 
-            <div slot="panel" class="panel">
+            <div style="display: none" slot="panel" class="panel">
                 <button v-if="postType==0" @click="setViewPostType"  class="fab"><i class="fas fa-book"></i></button>
                 <button v-if="postType==1" @click="setViewPostType"  class="fab"><i class="fas fa-water"></i></button>
                 <div v-if="canPost" class="fab-menu">
@@ -13,7 +13,8 @@ Vue.component('feed-view', {
                     <div v-if="showOptionsMenu" class="format-options">
                         <button id="createPost" class="fab"><i class="fas fa-plus"></i></button>
                         <button id="editPost" class="fab"><i class="fas fa-pencil"></i></button>
-                        <button id="removePost" class="fab"><i class="fas fa-trash"></i></button>                    </div>
+                        <button id="removePost" class="fab"><i class="fas fa-trash"></i></button>                    
+                    </div>
                 </div>
             </div>
 
@@ -33,6 +34,13 @@ Vue.component('feed-view', {
                 <button @click="showAddPostWPINModal=1">Add post</button>
                 <button @click="setPostType(0)">Set post as verse</button>
                 <button @click="setPostType(1)">Set post as poetry</button>
+                <hr>
+                <button v-if="postType==0" @click="setViewPostType"  class="fab"><i class="fas fa-book"></i></button>
+                <button v-if="postType==1" @click="setViewPostType"  class="fab"><i class="fas fa-water"></i></button>
+                <button @click="createPost($event,0)" class="fab"><i class="fas fa-plus"></i></button>
+                <button @click="editPost()" class="fab"><i class="fas fa-pencil"></i></button>
+                <button @click="removePost($event,currentPost)" class="fab"><i class="fas fa-trash"></i></button>                    
+                
                 <!-- <button @click="exportPosts">Export Posts</button>
                 <button @click="syncPosts">Sync Posts</button>
                 <button @click="triggerFileInput">Import Posts</button>
@@ -127,7 +135,7 @@ Vue.component('feed-view', {
         // window.addEventListener('scroll', this.handleScroll);
     },
 
-    mounted(){
+    mounted() {
         // get the feedViewer
         const feedViewer = this.$refs.feedViewer;
         //bind feedViewer exposed events
@@ -147,13 +155,13 @@ Vue.component('feed-view', {
     },
     methods: {
 
-        setViewPostType(){
-            this.postType=(this.postType+1)%2;
+        setViewPostType() {
+            this.postType = (this.postType + 1) % 2;
             state.currentPostViewType = this.postType;
         },
 
         handleClickOutside(event) {
-            if (!event.target.closest('.fab-menu')) {
+            if (event.manual || !event.target.closest('.fab-menu')) {
                 this.showFormatting = false;
                 this.showAlignment = false;
                 this.showMediaOptions = false;
@@ -164,10 +172,10 @@ Vue.component('feed-view', {
         loadData(event) {
             const { direction, currentPostId } = event.detail;
             let dir = direction === 'left' ? 1 : -1;
-            let pId = currentPostId ? currentPostId*dir : undefined;
+            let pId = currentPostId ? currentPostId * dir : undefined;
             DatabaseService.getPosts(pId).then(async posts => {
                 if (posts.length === 0) {
-                    posts = dir < 0 
+                    posts = dir < 0
                         ? await DatabaseService.getPosts(-1)
                         : await DatabaseService.getPosts();
                 }
@@ -190,11 +198,11 @@ Vue.component('feed-view', {
         handlePostAction(event) {
             const { action, postId, postIndex } = event.detail;
             console.log(`${action} action triggered for post ${postId} at index ${postIndex}`);
-            
+
             // on next tick to allow the click event to finish
             if (action == 'removePost') {
                 this.$nextTick(() => {
-                    this.currentPost && this.removePost(event, this.currentPost);   
+                    this.currentPost && this.removePost(event, this.currentPost);
                 });
             }
             else if (action == 'showActionSheet') {
@@ -216,6 +224,8 @@ Vue.component('feed-view', {
         },
 
         createPost(event, storePin) {
+            this.handleClickOutside({ manual:true });
+
             if (storePin) localStorage.setItem('token', this.SyncPIN);
 
             state.currentPost = {};
@@ -227,6 +237,8 @@ Vue.component('feed-view', {
         },
 
         editPost(event, storePin) {
+            this.handleClickOutside({ manual:true });
+
             if (storePin) localStorage.setItem('token', this.SyncPIN);
             if (localStorage.getItem('token')) {
                 state.currentPost = this.currentPost;
@@ -237,9 +249,10 @@ Vue.component('feed-view', {
         },
 
         async removePost(event, post) {
+            this.handleClickOutside({ manual:true });
             try {
                 await DatabaseService.removePost(post.id);
-                
+
                 //toast post removed
                 this.$emit('show-toast', 'Post removed successfully');
             } catch (error) {
